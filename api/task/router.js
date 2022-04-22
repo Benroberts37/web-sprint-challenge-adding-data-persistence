@@ -1,21 +1,35 @@
 // build your `/api/tasks` router here
-const express = require('express')
-const router = express.Router()
+const express = require('express') //eslint-disable-line
+const router = require('express').Router()
 const Tasks = require('./model')
-const {  checkIfProjectIdIsValid, checkIfNewTaskIsValid } = require('./middleware')
 
-router.get('/', async (req, res) => {
-    const tasks = await Tasks.getTasks()
-    const tasksWithBooleans = tasks.map(task => {
-        return {...task, task_completed: task.task_completed ? true : false}
+router.get('/', (req, res, next) => {
+    Tasks.getTasks()
+    .then(tasks => {
+        tasks.map(task => {
+            if(task.task_completed === 0) {
+                task.task_completed = false
+            } else {
+                task.task_completed = true
+            }
+        })
+        res.status(200).json(tasks)
     })
-    res.json(tasksWithBooleans)
+    .catch(next)
 })
 
-router.post('/', checkIfNewTaskIsValid, checkIfProjectIdIsValid, async (req, res) => {
-    const task = req.body
-    const newTaskRec = await Tasks.createTask(task)
-    res.json({...newTaskRec, task_completed: newTaskRec.task_completed ? true: false})
+router.post('/', (req, res, next) => {
+    Tasks.insert(req.body) 
+    .then(task => {
+        if (task.task_completed === 0) {
+            task.task_completed = false
+            res.status(201).json(task)
+        } else {
+            task.task_completed = true
+            res.status(201).json(task)
+        }
+    })
+    .catch(next)
 })
 
 module.exports = router
