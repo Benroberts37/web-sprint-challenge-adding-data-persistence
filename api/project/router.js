@@ -1,10 +1,10 @@
 // build your `/api/projects` router here
-//const express = require('express')
-const Project = require('./model')
+const express = require('express')
+const Projects = require('./model')
 const router = require('express').Router()
 
-router.get('/', async (res, req, next) => {
-    await Project.getProjects()
+router.get('/', async (req, res, next) => {
+    await Projects.getProjects()
     .then(projects => {
         projects.map(project => {
             if(project.project_completed === 0) {
@@ -18,8 +18,8 @@ router.get('/', async (res, req, next) => {
     .catch(next)
 })
 
-router.post('/'), (req, res, next) => {
-    Project.insert(req.body)
+router.post('/', (req, res, next) => {
+    Projects.insert(req.body)
     .then(project => {
         if (project.project_completed === 0) {
             project.project_completed = false
@@ -30,7 +30,7 @@ router.post('/'), (req, res, next) => {
         }
     })
     .catch(next)
-}
+})
 
 
 module.exports = router
