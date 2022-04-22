@@ -1,9 +1,6 @@
-/**
- * @param { import("knex").Knex } knex
- * @returns { Promise<void> }
- */
-exports.up =  function(knex) {
-        return knex.schema
+
+exports.up =  async function(knex) {
+        await knex.schema
         .createTable('projects', table => {
             table.increments('project_id')
             table.string('project_name').notNullable()
@@ -46,10 +43,7 @@ exports.up =  function(knex) {
          })
       };
 
-/**
- * @param { import("knex").Knex } knex
- * @returns { Promise<void> }
- */
+
 exports.down = function(knex) {
     return knex.schema
     .dropTableIfExists('project_resources')

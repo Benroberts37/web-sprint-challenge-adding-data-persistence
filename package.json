@@ -24,8 +24,8 @@
   "dependencies": {
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
-    "knex": "^2.0.0",
+    "knex": "1.0.5",
     "nodemon": "^2.0.15",
-    "sqlite3": "^5.0.5"
+    "@vscode/sqlite3": "^5.0.8"
   }
 }
